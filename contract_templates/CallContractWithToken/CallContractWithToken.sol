@@ -21,7 +21,11 @@ contract CallContractWithToken is IAxelarExecutable {
         string memory symbol,
         uint256 amount
     ) external payable {
-        //your code here
+        address tokenAddress = gateway.tokenAddresses(symbol);
+        IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
+        IERC20(tokenAddress).approve(address(gateway), amount);
+
+        //any other custom logic to your code here
 
         if (msg.value > 0) {
             gasReceiver.payNativeGasForContractCallWithToken{value: msg.value}(
@@ -50,6 +54,6 @@ contract CallContractWithToken is IAxelarExecutable {
         string memory tokenSymbol,
         uint256 amount
     ) internal override {
-        //your code here
+        // your custom code here
     }
 }
