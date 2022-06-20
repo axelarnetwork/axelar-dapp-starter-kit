@@ -100,7 +100,7 @@ const app = () => {
             await source.contract.methodOnSrcChain(
                 destination.name,
                 destination.contractCallWithToken,
-                destAddresses,
+                defaultAbiCoder.encode(["address[]"],[destAddresses]),
                 "aUSDC",
                 amount,
                 { value: BigInt(Math.floor(gasLimit * gasPrice)) }
