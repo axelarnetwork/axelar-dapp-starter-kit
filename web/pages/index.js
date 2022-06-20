@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDefaultProvider, Contract, AddressZero, Wallet } from "ethers";
+import { ethers, getDefaultProvider, Contract, AddressZero, Wallet } from "ethers";
 import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
 import NetworkInfo from "../info/local.json";
 import ContractABI from "../utils/CallContractWithToken.json";
@@ -37,10 +37,7 @@ const app = () => {
         const wallet = new Wallet(private_key);
 
         for (const chain of [source, destination]) {
-            chain.wallet =
-                chain.name === source.name
-                    ? new ethers.providers.Web3Provider(window.ethereum).getSigner()
-                    : wallet.connect(getDefaultProvider(chain.rpc));
+            chain.wallet = wallet.connect(getDefaultProvider(chain.rpc));
             chain.contract = new Contract(
                 chain.contractCallWithToken,
                 ContractABI.abi,
