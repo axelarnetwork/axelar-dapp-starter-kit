@@ -1,6 +1,6 @@
 'use strict';
 
-const { getDefaultProvider, Contract, constants: { AddressZero } } = require('ethers');
+const { getDefaultProvider, Contract, constants: { AddressZero }, utils: { defaultAbiCoder } } = require('ethers');
 const { utils: { deployContract }} = require('@axelar-network/axelar-local-dev');
 
 const ContractCallWithToken = require('../../build/CallContractWithToken.json');
@@ -60,7 +60,7 @@ async function test(chains, wallet, options) {
     await (await source.contract.methodOnSrcChain(
         destination.name,
         destination.contractCallWithToken,
-        accounts, 
+        defaultAbiCoder.encode(["address[]"], [accounts]), 
         'aUSDC',
         amount,
         {value: BigInt(Math.floor(gasLimit * gasPrice))}

@@ -49,10 +49,7 @@ const app = () => {
         console.log("wallet address", private_key, await wallet.getAddress())
 
         for (const chain of [source, destination]) {
-            chain.wallet =
-                chain.name === source.name
-                    ? new ethers.providers.Web3Provider(window.ethereum).getSigner()
-                    : wallet.connect(getDefaultProvider(chain.rpc));
+            chain.wallet = wallet.connect(getDefaultProvider(chain.rpc));
             chain.contract = new Contract(
                 chain.contractCallWithToken,
                 ContractABI.abi,

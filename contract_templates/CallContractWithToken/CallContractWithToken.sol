@@ -24,6 +24,9 @@ contract CallContractWithToken is IAxelarExecutable {
         address tokenAddress = gateway.tokenAddresses(symbol);
         IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
         IERC20(tokenAddress).approve(address(gateway), amount);
+
+        //any other custom logic to your code here
+
         if (msg.value > 0) {
             gasReceiver.payNativeGasForContractCallWithToken{value: msg.value}(
                 address(this),
