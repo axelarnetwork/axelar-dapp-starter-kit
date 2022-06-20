@@ -8,7 +8,7 @@
     "tokenName": "DEV",
     "tokenSymbol": "DEV",
     "constAddressDeployer": "0xe8014F32A38EB795BDa32E62a814bF788F42d693",
-    "contractCallWithToken": "0x775C53cd1F4c36ac74Cb4Aa1a3CA1508e9C4Bd24"
+    "contractCallWithToken": "0xE17654e76F467B00cD66BD37f178c939B1c9a510"
   },
   {
     "name": "Avalanche",
@@ -19,7 +19,7 @@
     "tokenName": "Avax",
     "tokenSymbol": "AVAX",
     "constAddressDeployer": "0xe8014F32A38EB795BDa32E62a814bF788F42d693",
-    "contractCallWithToken": "0x775C53cd1F4c36ac74Cb4Aa1a3CA1508e9C4Bd24"
+    "contractCallWithToken": "0xE17654e76F467B00cD66BD37f178c939B1c9a510"
   },
   {
     "name": "Fantom",
@@ -30,7 +30,7 @@
     "tokenName": "Fantom",
     "tokenSymbol": "FTM",
     "constAddressDeployer": "0xe8014F32A38EB795BDa32E62a814bF788F42d693",
-    "contractCallWithToken": "0x775C53cd1F4c36ac74Cb4Aa1a3CA1508e9C4Bd24"
+    "contractCallWithToken": "0xE17654e76F467B00cD66BD37f178c939B1c9a510"
   },
   {
     "name": "Ethereum",
@@ -41,7 +41,7 @@
     "tokenName": "Ether",
     "tokenSymbol": "ETH",
     "constAddressDeployer": "0xe8014F32A38EB795BDa32E62a814bF788F42d693",
-    "contractCallWithToken": "0x775C53cd1F4c36ac74Cb4Aa1a3CA1508e9C4Bd24"
+    "contractCallWithToken": "0xE17654e76F467B00cD66BD37f178c939B1c9a510"
   },
   {
     "name": "Polygon",
@@ -52,6 +52,6 @@
     "tokenName": "Matic",
     "tokenSymbol": "MATIC",
     "constAddressDeployer": "0xe8014F32A38EB795BDa32E62a814bF788F42d693",
-    "contractCallWithToken": "0x775C53cd1F4c36ac74Cb4Aa1a3CA1508e9C4Bd24"
+    "contractCallWithToken": "0xE17654e76F467B00cD66BD37f178c939B1c9a510"
   }
 ]

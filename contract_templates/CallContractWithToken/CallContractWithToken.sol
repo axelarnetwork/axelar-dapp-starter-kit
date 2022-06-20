@@ -17,12 +17,14 @@ contract CallContractWithToken is IAxelarExecutable {
     function methodOnSrcChain(
         string memory destinationChain,
         string memory destinationAddress,
-        bytes memory payload,
+        address[] calldata destinationAddresses,
         string memory symbol,
         uint256 amount
     ) external payable {
-        //your code here
-
+        address tokenAddress = gateway.tokenAddresses(symbol);
+        IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
+        IERC20(tokenAddress).approve(address(gateway), amount);
+        bytes memory payload = abi.encode(destinationAddresses);
         if (msg.value > 0) {
             gasReceiver.payNativeGasForContractCallWithToken{value: msg.value}(
                 address(this),
@@ -50,6 +52,12 @@ contract CallContractWithToken is IAxelarExecutable {
         string memory tokenSymbol,
         uint256 amount
     ) internal override {
-        //your code here
+        address[] memory recipients = abi.decode(payload, (address[]));
+        address tokenAddress = gateway.tokenAddresses(tokenSymbol);
+
+        uint256 sentAmount = amount / recipients.length;
+        for (uint256 i = 0; i < recipients.length; i++) {
+            IERC20(tokenAddress).transfer(recipients[i], sentAmount);
+        }
     }
 }
