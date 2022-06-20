@@ -1,13 +1,14 @@
 'use strict';
 
+require('dotenv').config();
 const { utils: { setJSON}, testnetInfo } = require('@axelar-network/axelar-local-dev');
 const {  Wallet, getDefaultProvider } = require('ethers');
 const { keccak256, defaultAbiCoder } = require('ethers/lib/utils');
 const { GasCostLogger } = require('./gasCosts');
+const fs = require("fs");
 
-
-
-const example = require(`../${process.argv[2]}/index.js`);
+console.log("V@@@@",process.argv[2])
+const example = require(`../contract_templates/${process.argv[2]}/index.js`);
 
 const env = process.argv[3];
 if(env == null || (env != 'testnet' && env != 'local')) throw new Error('Need to specify tesntet or local as an argument to this script.');
@@ -23,7 +24,7 @@ if(env == 'local') {
 }
 const chains = temp;
 
-const private_key = keccak256(defaultAbiCoder.encode(['string'], ['this is a random string to get a random account. You need to provide the private key for a funded account here.']));
+const private_key = keccak256(defaultAbiCoder.encode(['string'], [process.env.EVM_MNEMONIC]));
 const wallet = new Wallet(private_key);
 
 (async () => {
@@ -43,4 +44,15 @@ const wallet = new Wallet(private_key);
         await Promise.all(promises);
     }
     setJSON(chains, `./info/${env}.json`);
+    setJSON(chains, `./web/info/${env}.json`);
+
+    fs.copyFile(`./build/${process.argv[2]}.json`, `./web/utils/${process.argv[2]}.json`, (err) => {
+        if (err) throw err;
+    });
+    fs.copyFile(`./build/IAxelarGateway.json`, `./web/utils/IAxelarGateway.json`, (err) => {
+        if (err) throw err;
+    });
+    fs.copyFile(`./build/IERC20.json`, `./web/utils/IERC20.json`, (err) => {
+        if (err) throw err;
+    });
 })();
