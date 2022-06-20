@@ -50,7 +50,15 @@ async function test(chains, wallet, options) {
     await print();
 
     const gasLimit = 3e6;
-    const gasPrice = await getGasPrice(source, destination, AddressZero);
+    let gasPrice;
+
+    try {
+        gasPrice = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "aUSDC");
+    } catch (e) {
+        gasPrice = 1;
+    }
+
+    console.log("gas price",gasPrice)
     
     const balance = BigInt(await destination.usdc.balanceOf(accounts[0]));
     await (await source.usdc.approve(

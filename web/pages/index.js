@@ -14,6 +14,9 @@ import { getGasPrice } from "../utils/getGasPrice";
 import { connectWallet } from "../utils/connectWallet";
 import { checkIfWalletIsConnected } from "../utils/checkIfWalletIsConnected";
 import { checkCorrectNetwork } from "../utils/checkCorrectNetwork";
+// import { AxelarQueryAPI } from "@axelar-network/axelarjs-sdk";
+
+// const axelarApi = new AxelarQueryAPI({ environment: "testnet"})
 
 const app = () => {
     const [miningStatus, setMiningStatus] = useState(null);
@@ -86,6 +89,13 @@ const app = () => {
 
         const gasLimit = 3e6;
         const gasPrice = await getGasPrice(environment, source, destination, AddressZero);
+        // let gasPrice = 1;
+
+        // // try {
+        // //     gasPrice = await axelarApi.estimateGasFee(source.name.toLowerCase(), destination.name.toLowerCase(), "aUSDC");
+        // // } catch (e) {
+        // //     gasPrice = 1;
+        // // }
         setMiningStatus(0);
         setLoadingState(0);
 
