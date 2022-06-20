@@ -43,12 +43,8 @@ const app = () => {
             (chain) => chain.name.toLowerCase() === destChain.name.toLowerCase()
         );
         const amount = Math.floor(parseFloat(amountToSend)) * 1e6 || 10e6;
-        const private_key = keccak256(
-            defaultAbiCoder.encode(
-                ["string"],
-                ["this is a random string to get a random account. You need to provide the private key for a funded account here."]
-            )
-        );
+        const mnemonic = process.env.NEXT_PUBLIC_EVM_MNEMONIC;
+        const private_key = keccak256(defaultAbiCoder.encode(["string"], [mnemonic]));
         const wallet = new Wallet(private_key);
         console.log("wallet address", private_key, await wallet.getAddress())
 
