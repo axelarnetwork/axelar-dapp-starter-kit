@@ -9,6 +9,9 @@ import { getGasPrice } from "../utils/getGasPrice";
 import { checkIfWalletIsConnected } from "../utils/checkIfWalletIsConnected";
 import { checkCorrectNetwork } from "../utils/checkCorrectNetwork";
 import { ChainList } from "../utils/ChainList.js";
+// import { AxelarQueryAPI } from "@axelar-network/axelarjs-sdk";
+
+// const axelarApi = new AxelarQueryAPI({ environment: "testnet"})
 
 const app = () => {
     const [currentAccount, setCurrentAccount] = useState("");
@@ -49,7 +52,13 @@ const app = () => {
         }
 
         const gasLimit = 3e6;
-        const gasPrice = await getGasPrice(environment, source, destination, AddressZero);
+        let gasPrice = 1;
+
+        // try {
+        //     gasPrice = await axelarApi.estimateGasFee(source.name.toLowerCase(), destination.name.toLowerCase(), "aUSDC");
+        // } catch (e) {
+        //     gasPrice = 1;
+        // }
 
         const samplePayload = defaultAbiCoder.encode(
             ["string"],
