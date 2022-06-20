@@ -32,14 +32,8 @@ const app = () => {
             ? NetworkInfo.find((chain) => chain.name.toLowerCase() === destChain.name.toLowerCase())
             : "Moonbeam";
         const amount = Math.floor(parseFloat(amountToSend)) * 1e6 || 10e6;
-        const private_key = keccak256(
-            defaultAbiCoder.encode(
-                ["string"],
-                [
-                    "this is a random string to get a random account. You need to provide the private key for a funded account here."
-                ]
-            )
-        );
+        const mnemonic = process.env.NEXT_PUBLIC_EVM_MNEMONIC;
+        const private_key = keccak256(defaultAbiCoder.encode(["string"], [mnemonic]));
         const wallet = new Wallet(private_key);
 
         for (const chain of [source, destination]) {
@@ -58,7 +52,10 @@ const app = () => {
         const gasLimit = 3e6;
         const gasPrice = await getGasPrice(environment, source, destination, AddressZero);
 
-        const samplePayload = defaultAbiCoder.encode(["string"], ["this is a sample payload string"])
+        const samplePayload = defaultAbiCoder.encode(
+            ["string"],
+            ["this is a sample payload string"]
+        );
 
         debugger;
 
@@ -76,7 +73,7 @@ const app = () => {
                 { value: BigInt(Math.floor(gasLimit * gasPrice)) }
             )
         ).wait();
-        console.log("tx!",tx)
+        console.log("tx!", tx);
         return tx;
     };
 
