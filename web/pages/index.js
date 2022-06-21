@@ -1,12 +1,11 @@
 //index.js
 
 import { useState, useEffect } from "react";
-import { getDefaultProvider, Contract, AddressZero, Wallet, BigNumber } from "ethers";
+import { ethers, getDefaultProvider, Contract, AddressZero, Wallet, BigNumber } from "ethers";
 import { defaultAbiCoder } from "ethers/lib/utils";
 import Loader from "react-loader-spinner";
 import { ChainList } from "../utils/ChainList.js";
 import { TextInput } from "./components/TextInput.js";
-import { connectWallet } from "../utils/connectWallet";
 import { checkIfWalletIsConnected } from "../utils/checkIfWalletIsConnected";
 import { AxelarQueryAPI } from "@axelar-network/axelarjs-sdk";
 import { ChainCard } from "./components/ChainComponents";
@@ -23,13 +22,16 @@ const app = () => {
     const [needInput, setNeedInput] = useState(true);
     const [txError, setTxError] = useState(null);
     const [currentAccount, setCurrentAccount] = useState("");
-    const [correctNetwork, setCorrectNetwork] = useState(true);
     const [srcChain, setSrcChain] = useState(ChainList[0]);
     const [destChain, setDestChain] = useState(ChainList[1]);
     const [destAddresses, setDestAddresses] = useState([]);
     const [amountToSend, setAmountToSend] = useState(0);
     const [environment, setEnvironment] = useState("local");
-    const [devChainId, setDevChainId] = useState(NetworkInfo.find(network => network.name.toLowerCase() === srcChain.name.toLowerCase()).chainId);
+    const [devChainId, setDevChainId] = useState(
+        NetworkInfo.find((network) => network.name.toLowerCase() === srcChain.name.toLowerCase())
+            .chainId
+    );
+    const [destBalances, setDestBalances] = useState(null);
 
     useEffect(() => {
         checkIfWalletIsConnected(setCurrentAccount);
@@ -44,7 +46,7 @@ const app = () => {
             (chain) => chain.name.toLowerCase() === destChain.name.toLowerCase()
         );
         const amount = Math.floor(parseFloat(amountToSend)) * 1e6 || 10e6;
-        
+
         let wallet;
 
         const mnemonic = process.env.NEXT_PUBLIC_EVM_MNEMONIC;
@@ -96,11 +98,14 @@ const app = () => {
         let gasPrice;
 
         try {
-            gasPrice = environment === "local" ? gasLimit : await axelarApi.estimateGasFee(
-                source.name.toLowerCase(),
-                destination.name.toLowerCase(),
-                "USDC"
-            );
+            gasPrice =
+                environment === "local"
+                    ? gasLimit
+                    : await axelarApi.estimateGasFee(
+                          source.name.toLowerCase(),
+                          destination.name.toLowerCase(),
+                          "USDC"
+                      );
         } catch (e) {
             gasPrice = gasLimit;
         }
@@ -127,6 +132,7 @@ const app = () => {
         setLoadingState(1);
         console.log("--- After ---");
         await print();
+        setDestBalances(await getBalances(destChain.name, destAddresses))
     };
 
     return (
@@ -134,74 +140,58 @@ const app = () => {
             <h2 className="text-3xl font-bold mb-20 mt-12">
                 Sample ContractCallWithToken: Let's airdrop!
             </h2>
-            {currentAccount === "" ? (
-                <button
-                    className="text-2xl font-bold py-3 px-12 bg-black shadow-lg shadow-[#6FFFE9] rounded-lg mb-10 hover:scale-105 transition duration-500 ease-in-out"
-                    onClick={connectWallet}
-                >
-                    Connect Wallet
-                </button>
-            ) : correctNetwork ? (
-                needInput && (
-                    <div className="bg-base-100 shadow-xl w-4/6">
-                        <div className="grid grid-cols-2 gap-10 ">
-                            {" "}
-                            {ChainCard(srcChain, (option) => {
-                                setSrcChain(option);
-                                setDevChainId(
-                                    NetworkInfo.find(
-                                        (network) =>
-                                            network.name.toLowerCase() === option.name.toLowerCase()
-                                    )?.chainId
-                                );
-                            })}
-                            {ChainCard(destChain, (option) => setDestChain(option))}
-                        </div>
-                        <div className="flex flex-col justify-center items-center mb-10 font-bold text-2xl">
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Enter aUSDC amount</span>
-                                </label>
-                                <label className="input-group">
-                                    <input
-                                        type="text"
-                                        placeholder="5"
-                                        className="input input-bordered"
-                                        onChange={(e) => setAmountToSend(e.target.value)}
-                                    />
-                                    <span>aUSDC</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div className="flex flex-col justify-center items-center mb-10 font-bold text-2xl">
-                            <TextInput
-                                className={"w-1/2"}
-                                cb={(addr) => setDestAddresses([...destAddresses, addr])}
-                            />
-                        </div>
-                        <div className="flex flex-row justify-center items-center mb-10 font-bold text-2xl gap-2">
-                            {destAddresses?.map((addr) => (
-                                <div className="badge badge-primary">
-                                    {addr.slice(0, 5) + "..." + addr.slice(35)}
-                                </div>
-                            ))}
-                        </div>
-                        <div className="flex flex-row justify-center items-center mb-10 font-bold text-2xl gap-2">
-                            <button
-                                className="text-2xl font-bold py-3 px-12 bg-black rounded-lg mb-10 hover:scale-105 transition duration-500 ease-in-out"
-                                onClick={executeCallContractWithToken}
-                            >
-                                Execute CallContractWithToken
-                            </button>
+            {needInput && (
+                <div className="bg-base-100 shadow-xl w-4/6">
+                    <div className="grid grid-cols-2 gap-10 ">
+                        {" "}
+                        {ChainCard(srcChain, (option) => {
+                            setSrcChain(option);
+                            setDevChainId(
+                                NetworkInfo.find(
+                                    (network) =>
+                                        network.name.toLowerCase() === option.name.toLowerCase()
+                                )?.chainId
+                            );
+                        })}
+                        {ChainCard(destChain, (option) => setDestChain(option))}
+                    </div>
+                    <div className="flex flex-col justify-center items-center mb-10 font-bold text-2xl">
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Enter aUSDC amount</span>
+                            </label>
+                            <label className="input-group">
+                                <input
+                                    type="text"
+                                    placeholder="5"
+                                    className="input input-bordered"
+                                    onChange={(e) => setAmountToSend(e.target.value)}
+                                />
+                                <span>aUSDC</span>
+                            </label>
                         </div>
                     </div>
-                )
-            ) : (
-                <div className="flex flex-col justify-center items-center mb-20 font-bold text-2xl gap-y-3">
-                    <div>----------------------------------------</div>
-                    <div>Please connect to the {srcChain.name} Network</div>
-                    <div>and reload the page</div>
-                    <div>----------------------------------------</div>
+                    <div className="flex flex-col justify-center items-center mb-10 font-bold text-2xl">
+                        <TextInput
+                            className={"w-1/2"}
+                            cb={(addr) => setDestAddresses([...destAddresses, addr])}
+                        />
+                    </div>
+                    <div className="flex flex-row justify-center items-center mb-10 font-bold text-2xl gap-2">
+                        {destAddresses?.map((addr) => (
+                            <div key={`dest-addr-${addr}`} className="badge badge-primary">
+                                {addr.slice(0, 5) + "..." + addr.slice(35)}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex flex-row justify-center items-center mb-10 font-bold text-2xl gap-2">
+                        <button
+                            className="text-2xl font-bold py-3 px-12 bg-black rounded-lg mb-10 hover:scale-105 transition duration-500 ease-in-out"
+                            onClick={executeCallContractWithToken}
+                        >
+                            Execute CallContractWithToken
+                        </button>
+                    </div>
                 </div>
             )}
 
@@ -226,11 +216,36 @@ const app = () => {
                 )
             ) : (
                 <div className="flex flex-col justify-center items-center h-60 w-60 rounded-lg shadow-2xl shadow-[#6FFFE9] hover:scale-105 transition duration-500 ease-in-out">
-                    Transfers Complete!
+                    <div>Transfers Complete!</div>
+                    <div>Updated Balances on {destChain.name}</div>
+                    <div>{destBalances && destBalances.map(destBal => {
+                        return <div key={`dest-balance-${destBal.address}`} className="flex flow-row">
+                            <span>0x...{destBal.address.slice(35)}: </span>
+                            <span>{destBal.balance}</span>
+                        </div>
+                    })}</div>
                 </div>
             )}
         </div>
     );
 };
+
+export async function getBalances(chainName, addresses) {
+    const destination = NetworkInfo.find(
+        (chain) => chain.name.toLowerCase() === chainName.toLowerCase()
+    );
+    const balances = [];
+
+    for (let i = 0; i < addresses.length; i++) {
+        const addr = addresses[i];
+        balances.push({
+            chain: chainName,
+            address: addr,
+            balance: ethers.utils.formatUnits(await destination.usdc.balanceOf(addr),6)
+    
+        })
+    }
+    return balances;
+}
 
 export default app;
