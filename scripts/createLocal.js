@@ -16,9 +16,9 @@ const ConstAddressDeployer = require("axelar-utils-solidity/dist/ConstAddressDep
     const private_key = process.env.EVM_PRIVATE_KEY;
     
     let wallet;
-    if (mnemonic !== null && mnemonic.length > 0) {
+    if (!!mnemonic && mnemonic.length > 0) {
         wallet = Wallet.fromMnemonic(mnemonic);
-    } else if (private_key !== null && private_key.length > 0) {
+    } else if (!!private_key && private_key.length > 0) {
         wallet = new Wallet(private_key);
     }
     const deployer_address = wallet.address;
@@ -27,7 +27,7 @@ const ConstAddressDeployer = require("axelar-utils-solidity/dist/ConstAddressDep
     async function callback(chain, info) {
         await chain.giveToken(deployer_address, "aUSDC", 100e6);
         const contract = await deployContract(
-            new Wallet(private_key, chain.provider),
+            wallet.connect(chain.provider),
             ConstAddressDeployer
         );
         info.constAddressDeployer = contract.address;
