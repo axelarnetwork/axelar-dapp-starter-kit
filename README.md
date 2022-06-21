@@ -29,13 +29,16 @@ npm update && npm install
 
 ## Build
 
-1. In order to run your application against the local emulator, cd to the root directory of this project and run the command below. NOTE: Leave this node running on a separate terminal before deploying and testing the dApps.
+#### LOCAL SETUP
+
+-   cd to the root directory of this project and run the command below.
+-   NOTE: Leave this node running on a separate terminal before deploying and testing the dApps.
 
 ```bash
 npm run run-local-env
 ```
 
-2. Build and deploy your application locally.
+#### BUILD LOCAL
 
 First, set up a `.env` file based on the `.env.sample` template in the root directory and update your local wallet for testing. Use either EVM_MNEMONIC or EVM_PRIVATE_KEY, but not both!
 
@@ -54,12 +57,9 @@ This will build your contracts in the `build` folder and the `web` directory for
 -   `info` for contract addresses by environment
 -   `web/abi` for relevant ABIs, abd `web/info` for the network info for the UI
 
-3. Test, either through the command line via script or (optionally) through this built-in UI
+#### TEST
 
-Option 1: Via command line:
-
--   The `index.js` file already has the base scaffold for how to invoke you new contract. Update that file to tailor to your code implementation
--   Then run
+Option 1: Via command line, run:
 
 ```bash
 npm run invoke-contract <TEMPLATE_DIRECTORY> <ENVIRONMENT> <SRC_CHAIN> <DEST_CHAIN> <AMOUNT> <ADDR_1> <ADDR_2> <OTHER_ADDRESSES>
@@ -76,12 +76,15 @@ Option 2: run your UI in the following steps:
 -   open browser at `http://localhost:3000`
 -   enter params in the UI. in the text input, be sure to hit the "Enter" key after each destination address!
 
-4. Once you are comfortable with your local dev scripts, deploying it to testnet should be simple:
+## DEPLOY
+
+Once you are comfortable with your local dev scripts, deploying it to testnet should be simple:
 
 ```bash
 npm run deploy <TEMPLATE_DIRECTORY> testnet
-```
 
-e.g. `npm run deploy CallContractWithToken testnet`
+# e.g.
+npm run deploy CallContractWithToken testnet
+```
 
 Ensure that the account tied to your EVM_MNEMONIC has enough funds to deploy to all supported EVM chains!
