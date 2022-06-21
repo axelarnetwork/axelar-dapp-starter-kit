@@ -1,6 +1,6 @@
 'use strict';
 
-const { getDefaultProvider, Contract, constants: { AddressZero }, utils: { defaultAbiCoder }, ethers } = require('ethers');
+const { getDefaultProvider, Contract, utils: { defaultAbiCoder } } = require('ethers');
 const { utils: { deployContract }} = require('@axelar-network/axelar-local-dev');
 
 const ContractCallWithToken = require('../../build/CallContractWithToken.json');
@@ -20,7 +20,7 @@ async function test(chains, wallet, options) {
     const getGasPrice = options.getGasPrice;
     const source = chains.find(chain => chain.name == (args[0] || 'Avalanche'));
     const destination = chains.find(chain =>chain.name == (args[1] || 'Fantom'));
-    const amount = Math.floor(parseFloat(args[2]))*1e6 || 10e6;
+    const amount = Math.floor(parseFloat(args[2]) * 1e6) || 10e6;
     const accounts = args.slice(3);
     if(accounts.length == 0)
         accounts.push(wallet.address);
@@ -33,7 +33,7 @@ async function test(chains, wallet, options) {
         console.log("aUSDC address for chain", chain.rpc, usdcAddress)
         chain.usdc = new Contract(usdcAddress, IERC20.abi, chain.wallet);
     }
-    
+
     async function print() {
         console.log(`${wallet.address} has ${await source.usdc.balanceOf(wallet.address)/1e6} aUSDC on ${source.name}`)
         for(const account of accounts) {
@@ -55,7 +55,7 @@ async function test(chains, wallet, options) {
     } catch (e) {
         gasFee = 1;
     }
-    
+
     const balance = BigInt(await destination.usdc.balanceOf(accounts[0]));
     await (await source.usdc.approve(
         source.contract.address,
@@ -64,7 +64,7 @@ async function test(chains, wallet, options) {
     await (await source.contract.methodOnSrcChain(
         destination.name,
         destination.contractCallWithToken,
-        defaultAbiCoder.encode(["address[]"], [accounts]), 
+        defaultAbiCoder.encode(["address[]"], [accounts]),
         'aUSDC',
         amount,
         {value: BigInt(gasFee)}
