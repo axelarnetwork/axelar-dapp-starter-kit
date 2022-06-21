@@ -4,7 +4,7 @@ const axelarLocal = require('@axelar-network/axelar-local-dev');
 
 const {
     AxelarAssetTransfer
-} = require("@axelar-network/axelarjs-sdk/dist/src/index");
+} = require("@axelar-network/axelarjs-sdk");
 const ConstAddressDeployer = require('axelar-utils-solidity/dist/ConstAddressDeployer.json');
 
 function getDepositAddress(env, source, destination, destinationAddress, symbol) {

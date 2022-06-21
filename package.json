@@ -18,7 +18,7 @@
   "dependencies": {
     "@axelar-network/axelar-cgp-solidity": "3.2.1",
     "@axelar-network/axelar-local-dev": "git+https://github.com/axelarnetwork/axelar-local-dev.git",
-    "@axelar-network/axelarjs-sdk": "^0.6.0-alpha.12",
+    "@axelar-network/axelarjs-sdk": "^0.6.0-alpha.13",
     "@openzeppelin/contracts": "^4.5.0",
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",

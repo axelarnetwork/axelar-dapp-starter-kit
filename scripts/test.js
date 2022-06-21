@@ -2,7 +2,7 @@
 
 require('dotenv').config();
 const { utils: { setJSON }, testnetInfo } = require('@axelar-network/axelar-local-dev');
-const { AxelarQueryAPI } = require('@axelar-network/axelarjs-sdk/dist/src/index.js');
+const { AxelarQueryAPI } = require('@axelar-network/axelarjs-sdk');
 const {  Wallet, getDefaultProvider, constants: { AddressZero } } = require('ethers');
 const { keccak256, defaultAbiCoder } = require('ethers/lib/utils');
 const { GasCostLogger } = require('./gasCosts');
