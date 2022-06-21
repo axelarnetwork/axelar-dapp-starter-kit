@@ -1,6 +1,6 @@
 'use strict';
 
-const { getDefaultProvider, Contract, constants: { AddressZero }, utils: { defaultAbiCoder } } = require('ethers');
+const { getDefaultProvider, Contract, constants: { AddressZero }, utils: { defaultAbiCoder }, ethers } = require('ethers');
 const { utils: { deployContract }} = require('@axelar-network/axelar-local-dev');
 
 const ContractCallWithToken = require('../../build/CallContractWithToken.json');
@@ -49,17 +49,14 @@ async function test(chains, wallet, options) {
     console.log('--- Initially ---');
     await print();
 
-    const gasLimit = 3e6;
     let gasPrice;
 
     try {
         gasPrice = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "USDC");
+        gasPrice = ethers.utils.formatEther(gasPrice)
     } catch (e) {
-        console.log("catching",e)
         gasPrice = 1;
     }
-
-    console.log("gas price",gasPrice)
     
     const balance = BigInt(await destination.usdc.balanceOf(accounts[0]));
     await (await source.usdc.approve(
@@ -72,7 +69,7 @@ async function test(chains, wallet, options) {
         defaultAbiCoder.encode(["address[]"], [accounts]), 
         'aUSDC',
         amount,
-        {value: BigInt(Math.floor(gasLimit * gasPrice))}
+        {value: BigInt(Math.floor(gasPrice))}
     )).wait();
     while(BigInt(await destination.usdc.balanceOf(accounts[0])) == balance) {
         await sleep(2000);

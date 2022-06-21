@@ -51,14 +51,14 @@ const app = () => {
             chain.usdc = new Contract(usdcAddress, IERC20.abi, chain.wallet);
         }
 
-        const gasLimit = 3e6;
-        let gasPrice = 1;
+        let gasPrice;
 
-        // try {
-        //     gasPrice = await axelarApi.estimateGasFee(source.name.toLowerCase(), destination.name.toLowerCase(), "aUSDC");
-        // } catch (e) {
-        //     gasPrice = 1;
-        // }
+        try {
+            gasPrice = await axelarApi.estimateGasFee(source.name.toLowerCase(), destination.name.toLowerCase(), "USDC");
+            gasPrice = ethers.utils.formatEther(gasPrice);
+        } catch (e) {
+            gasPrice = 1;
+        }
 
         const samplePayload = defaultAbiCoder.encode(
             ["string"],
@@ -78,7 +78,7 @@ const app = () => {
                 samplePayload,
                 "aUSDC",
                 amount,
-                { value: BigInt(Math.floor(gasLimit * gasPrice)) }
+                { value: BigInt(Math.floor(gasPrice)) }
             )
         ).wait();
         console.log("tx!", tx);
