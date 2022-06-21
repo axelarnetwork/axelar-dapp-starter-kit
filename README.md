@@ -13,7 +13,7 @@ Once ready, you can use this repo to deploy your contracts to testnet.
 
 ## One-time setup
 
-Install [nodejs](https://nodejs.org/en/download/). Run `node -v` to check your installation.
+Install [nodejs](https://nodejs.org/en/download/) version 16. Run `node -v` to check your installation. You can switch your node version via `sudo n v16.15.0`.
 
 Clone this repo:
 
