@@ -49,12 +49,11 @@ async function test(chains, wallet, options) {
     console.log('--- Initially ---');
     await print();
 
-    let gasPrice;
-
+    let gasFee;
     try {
-        gasPrice = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "aUSDC");
+        gasFee = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "USDC");
     } catch (e) {
-        gasPrice = 1;
+        gasFee = 1;
     }
     
     const balance = BigInt(await destination.usdc.balanceOf(accounts[0]));
@@ -68,7 +67,7 @@ async function test(chains, wallet, options) {
         defaultAbiCoder.encode(["address[]"], [accounts]), 
         'aUSDC',
         amount,
-        {value: BigInt(gasPrice)}
+        {value: BigInt(gasFee)}
     )).wait();
     while(BigInt(await destination.usdc.balanceOf(accounts[0])) == balance) {
         await sleep(2000);
