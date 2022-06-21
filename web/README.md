@@ -2,6 +2,12 @@
 
 This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
 
+The UI package in the `web` directory contains an equally-opinionated web framework using:
+
+-   nextjs and daisy ui for frontend frameworks
+-   `ethers.js` for blockchain RPC abstraction
+-   AxelarJS SDK's query services, e.g. for estimating the value of gas to be paid to the gas receiver on the source chain
+
 ## Preview
 
 Preview the example live on [StackBlitz](http://stackblitz.com/):

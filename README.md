@@ -9,9 +9,7 @@ The code provides a basic scaffold for:
 -   Solidity contract templates (`contract_templates` directory)
 -   a web interface (`web` directory)
 
-Once ready, you can use this repo to deploy your contracts to testnet and mainnet.
-
-**Note:** In addition, we have a full suite of examples for various use cases [here](https://github.com/axelarnetwork/axelar-local-gmp-examples), for additional inspiration.
+Once ready, you can use this repo to deploy your contracts to testnet.
 
 ## One-time setup
 
@@ -31,31 +29,15 @@ npm update && npm install
 
 ## Build
 
-1. In order to run your application against the local emulator, cd to the root directory of this project and run
+1. In order to run your application against the local emulator, cd to the root directory of this project and run the command below. NOTE: Leave this node running on a separate terminal before deploying and testing the dApps.
 
 ```bash
 npm run run-local-env
 ```
 
-NOTE: Leave this node running on a separate terminal before deploying and testing the dApps.
+2. Build and deploy your application locally.
 
-2. Build upon the existing Solidity templates. Each solidity template includes an opinionated structure for the contracts. In general, you will find that these contracts:
-
--   are of type `IAxelarExecutable`
--   are intended to be a single representative contract that are deployed on all chains.
--   includes basic implementation for `methodOnSrcChain`, which:
-    -   is invoked on the source chain
-    -   has a built-in method for paying the gas receiver in native tokens
-    -   invokes the relevant cross-chain method (i.e. `callContract` or `callContractWithToken`) on the gateway contract on the source chain
--   includes `_execute` (for `callContract`) and `_executeWithToken` (for `callContractWithToken`) internal methods
-    -   is invoked on the destination chain
-    -   requires your own code logic (thus the "your custom code here" directive!)
-
-Of course, these are just templates for basic usage. Please see `axelar-local-gmp-examples` for more advanced usage/examples.
-
-3. Build and deploy your application locally.
-
-First, set up a `.env` file based on the `.env.sample` template in the root directory and update an EVM_MNEMONIC used for testing.
+First, set up a `.env` file based on the `.env.sample` template in the root directory and update your local wallet for testing. Use either EVM_MNEMONIC or EVM_PRIVATE_KEY, but not both!
 
 Then run the following command:
 
@@ -66,33 +48,27 @@ npm run deploy <TEMPLATE_DIRECTORY> <ENVIRONMENT>
 
 e.g. `npm run deploy CallContractWithToken local`
 
-Not only will this build your contracts in the `build` folder, but it will also dump the relevant files into the `web` directory, which is helpful for the next step (4):
+This will build your contracts in the `build` folder and the `web` directory for the UI build.
 
 -   `info` for contract addresses by environment
--   `utils` directory for relevant ABIs
+-   `web/abi` for relevant ABIs, abd `web/info` for the network info for the UI
 
-4. Test, either through the command line via script or (optionally) through this built-in UI
+3. Test, either through the command line via script or (optionally) through this built-in UI
 
 Option 1: Via command line:
 
-1. The `index.js` file already has the base scaffold for how to invoke you new contract. Update that file to tailor to your code implementation
-2. Then run `npm run invoke-contract <ARG1> <ARG2>` (with your custom args as needed)
+a. The `index.js` file already has the base scaffold for how to invoke you new contract. Update that file to tailor to your code implementation
+b. Then run `npm run invoke-contract <TEMPLATE_DIRECTORY> <ENVIRONMENT> <SRC_CHAIN> <DEST_CHAIN> <AMOUNT> <ADDR_1> <ADDR_2> <OTHER_ADDRESSES>` (with your custom args as needed)
+e.g. `npm run invoke-contract CallContractWithToken local Ethereum Avalanche 40 0x74Ccd7d9F1F40417C6F7fD1151429a2c44c34e6d 0x3B94CbD6d0f09db75435d6E3c9449a6B70BB55E2`
 
 Option 2: run your UI in the following steps:
 
-1. In a separate terminal window, cd to the `web` directory
-2. Set up a `.env.local` file based on the `.env.sample` template in the `web` directory and update a NEXT_PUBLIC_EVM_MNEMONIC used for testing.
-3. run `npm install`
-4. run `npm run dev`
-5. check out `http://localhost:3000` in the browser
-6. you will see that everything is already wired to hit your local dev environment based on the configs in the `info` directory
-7. From there, feel free to iterate on your code in the `pages/index.js` file to tailor to your application!
-
-The UI package in the `web` directory contains an equally-opinionated web framework using:
-
--   nextjs and daisy ui for frontend frameworks
--   `ethers.js` for blockchain RPC abstraction
--   AxelarJS SDK's query services, e.g. for estimating the value of gas to be paid to the gas receiver on the source chain
+a. In a separate terminal window, cd to the `web` directory
+b. Set up a `.env.local` file based on the `.env.sample` template in the `web` directory and update either a NEXT_PUBLIC_EVM_MNEMONIC or NEXT_PUBLIC_EVM_PRIVATE_KEY (but not both) used for testing.
+c. run `npm install`
+d. run `npm run dev`
+e. check out `http://localhost:3000` in the browser
+f. enter params in the UI. in the text input, be sure to hit the "Enter" key after each destination address!
 
 5. Once you are comfortable with your local dev scripts, deploying it to testnet should be simple:
 
