@@ -29,6 +29,10 @@ npm update && npm install
 
 ## Build
 
+#### LOCAL ENVIRONMENT
+
+First, set up a `.env` file based on the `.env.sample` template in the root directory and update your local wallet for testing. Use either EVM_MNEMONIC or EVM_PRIVATE_KEY, but not both!
+
 #### LOCAL SETUP
 
 -   cd to the root directory of this project and run the command below.
@@ -40,9 +44,7 @@ npm run run-local-env
 
 #### BUILD LOCAL
 
-First, set up a `.env` file based on the `.env.sample` template in the root directory and update your local wallet for testing. Use either EVM_MNEMONIC or EVM_PRIVATE_KEY, but not both!
-
-Then run the following command:
+Then, from a separate terminal, run the following command:
 
 ```bash
 npm run build
