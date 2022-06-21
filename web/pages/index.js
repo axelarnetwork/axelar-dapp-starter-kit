@@ -1,7 +1,7 @@
 //index.js
 
 import { useState, useEffect } from "react";
-import { ethers, getDefaultProvider, Contract, AddressZero, Wallet } from "ethers";
+import { ethers, getDefaultProvider, Contract, AddressZero, Wallet, BigNumber } from "ethers";
 import { keccak256, defaultAbiCoder } from "ethers/lib/utils";
 import Loader from "react-loader-spinner";
 import NetworkInfo from "../info/local.json";
@@ -14,9 +14,9 @@ import { getGasPrice } from "../utils/getGasPrice";
 import { connectWallet } from "../utils/connectWallet";
 import { checkIfWalletIsConnected } from "../utils/checkIfWalletIsConnected";
 import { checkCorrectNetwork } from "../utils/checkCorrectNetwork";
-// import { AxelarQueryAPI } from "@axelar-network/axelarjs-sdk";
+import { AxelarQueryAPI } from "@axelar-network/axelarjs-sdk";
 
-// const axelarApi = new AxelarQueryAPI({ environment: "testnet"})
+const axelarApi = new AxelarQueryAPI({ environment: "testnet"})
 
 const app = () => {
     const [miningStatus, setMiningStatus] = useState(null);
@@ -88,14 +88,14 @@ const app = () => {
         }
 
         const gasLimit = 3e6;
-        const gasPrice = await getGasPrice(environment, source, destination, AddressZero);
-        // let gasPrice = 1;
+        let gasPrice = 1;
 
-        // // try {
-        // //     gasPrice = await axelarApi.estimateGasFee(source.name.toLowerCase(), destination.name.toLowerCase(), "aUSDC");
-        // // } catch (e) {
-        // //     gasPrice = 1;
-        // // }
+        try {
+            gasPrice = await axelarApi.estimateGasFee(source.name.toLowerCase(), destination.name.toLowerCase(), "USDC");
+        } catch (e) {
+            gasPrice = gasLimit;
+        }
+        
         setMiningStatus(0);
         setLoadingState(0);
 
@@ -108,7 +108,7 @@ const app = () => {
                 defaultAbiCoder.encode(["address[]"],[destAddresses]),
                 "aUSDC",
                 amount,
-                { value: BigInt(Math.floor(gasLimit * gasPrice)) }
+                { value: BigNumber.from(gasPrice) }
             )
         ).wait();
         console.log("tx", tx);

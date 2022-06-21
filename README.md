@@ -53,7 +53,7 @@ NOTE: Leave this node running on a separate terminal before deploying and testin
 
 Of course, these are just templates for basic usage. Please see `axelar-local-gmp-examples` for more advanced usage/examples.
 
-3. Deploy your application locally.
+3. Build and deploy your application locally.
 
 ```bash
 npm run build
@@ -62,7 +62,23 @@ npm run deploy <TEMPLATE_DIRECTORY> <ENVIRONMENT>
 
 e.g. `npm run deploy CallContractWithToken local`
 
-4.
+Not only will this build your contracts in the `build` folder, but it will also dump the relevant files into the `web` directory, which is helpful for the next step (4):
+
+-   `info` for contract addresses by environment
+-   `utils` directory for relevant ABIs
+
+4. (optional): run your UI in the following steps:
+    1. In a separate terminal window, cd to the `web` directory
+    2. run `npm install`
+    3. run `npm run dev`
+    4. check out `http://localhost:3000` in the browser
+    5. you will see that everything is already wired to hit your local dev environment based on the configs in the `info` directory
+    6. From there, feel free to iterate on your code in the `pages/index.js` file to tailor to your application!
+
+The UI package in the `web` directory contains an equally-opinionated web framework using:
+
+-   nextjs and daisy ui for frontend frameworks
+-   `ethers.js` for blockchain RPC abstraction
 
 ### Call contract with token
 
