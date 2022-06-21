@@ -53,7 +53,6 @@ async function test(chains, wallet, options) {
 
     try {
         gasPrice = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "USDC");
-        gasPrice = ethers.utils.formatEther(gasPrice)
     } catch (e) {
         gasPrice = 1;
     }
@@ -69,7 +68,7 @@ async function test(chains, wallet, options) {
         defaultAbiCoder.encode(["address[]"], [accounts]), 
         'aUSDC',
         amount,
-        {value: BigInt(Math.floor(gasPrice))}
+        {value: BigInt(gasPrice)}
     )).wait();
     while(BigInt(await destination.usdc.balanceOf(accounts[0])) == balance) {
         await sleep(2000);
