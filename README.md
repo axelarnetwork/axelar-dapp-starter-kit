@@ -44,9 +44,10 @@ Then run the following command:
 ```bash
 npm run build
 npm run deploy <TEMPLATE_DIRECTORY> <ENVIRONMENT>
-```
 
-e.g. `npm run deploy CallContractWithToken local`
+# e.g.
+npm run deploy CallContractWithToken local
+```
 
 This will build your contracts in the `build` folder and the `web` directory for the UI build.
 
@@ -58,8 +59,14 @@ This will build your contracts in the `build` folder and the `web` directory for
 Option 1: Via command line:
 
 -   The `index.js` file already has the base scaffold for how to invoke you new contract. Update that file to tailor to your code implementation
--   Then run `npm run invoke-contract <TEMPLATE_DIRECTORY> <ENVIRONMENT> <SRC_CHAIN> <DEST_CHAIN> <AMOUNT> <ADDR_1> <ADDR_2> <OTHER_ADDRESSES>` (with your custom args as needed)
-    e.g. `npm run invoke-contract CallContractWithToken local Ethereum Avalanche 40 0x74Ccd7d9F1F40417C6F7fD1151429a2c44c34e6d 0x3B94CbD6d0f09db75435d6E3c9449a6B70BB55E2`
+-   Then run
+
+```bash
+npm run invoke-contract <TEMPLATE_DIRECTORY> <ENVIRONMENT> <SRC_CHAIN> <DEST_CHAIN> <AMOUNT> <ADDR_1> <ADDR_2> <OTHER_ADDRESSES>
+
+# e.g.
+npm run invoke-contract CallContractWithToken local Ethereum Avalanche 40 0x74Ccd7d9F1F40417C6F7fD1151429a2c44c34e6d 0x3B94CbD6d0f09db75435d6E3c9449a6B70BB55E2
+```
 
 Option 2: run your UI in the following steps:
 
