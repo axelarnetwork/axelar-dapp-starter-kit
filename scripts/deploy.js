@@ -7,7 +7,6 @@ const { keccak256, defaultAbiCoder } = require('ethers/lib/utils');
 const { GasCostLogger } = require('./gasCosts');
 const fs = require("fs");
 
-console.log("V@@@@",process.argv[2])
 const example = require(`../contract_templates/${process.argv[2]}/index.js`);
 
 const env = process.argv[3];

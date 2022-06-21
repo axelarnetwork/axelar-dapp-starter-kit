@@ -11,7 +11,8 @@
     "call-contract-with-token": "node contract_templates/call-contract-with-token",
     "build": "rm -rf build && waffle",
     "deploy": "node scripts/deploy",
-    "run-local-env": "node scripts/createLocal"
+    "run-local-env": "node scripts/createLocal",
+    "invoke-contract": "node scripts/test"
   },
   "author": "",
   "license": "ISC",

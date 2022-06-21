@@ -55,6 +55,10 @@ Of course, these are just templates for basic usage. Please see `axelar-local-gm
 
 3. Build and deploy your application locally.
 
+First, set up a `.env` file based on the `.env.sample` template in the root directory and update an EVM_MNEMONIC used for testing.
+
+Then run the following command:
+
 ```bash
 npm run build
 npm run deploy <TEMPLATE_DIRECTORY> <ENVIRONMENT>
@@ -67,47 +71,35 @@ Not only will this build your contracts in the `build` folder, but it will also 
 -   `info` for contract addresses by environment
 -   `utils` directory for relevant ABIs
 
-4. (optional): run your UI in the following steps:
-    1. In a separate terminal window, cd to the `web` directory
-    2. run `npm install`
-    3. run `npm run dev`
-    4. check out `http://localhost:3000` in the browser
-    5. you will see that everything is already wired to hit your local dev environment based on the configs in the `info` directory
-    6. From there, feel free to iterate on your code in the `pages/index.js` file to tailor to your application!
+4. Test, either through the command line via script or (optionally) through this built-in UI
+
+Option 1: Via command line:
+
+1. The `index.js` file already has the base scaffold for how to invoke you new contract. Update that file to tailor to your code implementation
+2. Then run `npm run invoke-contract <ARG1> <ARG2>` (with your custom args as needed)
+
+Option 2: run your UI in the following steps:
+
+1. In a separate terminal window, cd to the `web` directory
+2. Set up a `.env.local` file based on the `.env.sample` template in the `web` directory and update a NEXT_PUBLIC_EVM_MNEMONIC used for testing.
+3. run `npm install`
+4. run `npm run dev`
+5. check out `http://localhost:3000` in the browser
+6. you will see that everything is already wired to hit your local dev environment based on the configs in the `info` directory
+7. From there, feel free to iterate on your code in the `pages/index.js` file to tailor to your application!
 
 The UI package in the `web` directory contains an equally-opinionated web framework using:
 
 -   nextjs and daisy ui for frontend frameworks
 -   `ethers.js` for blockchain RPC abstraction
+-   AxelarJS SDK's query services, e.g. for estimating the value of gas to be paid to the gas receiver on the source chain
 
-### Call contract with token
-
-Send aUSDC from source-chain to destination-chain and distribute it equally among all accounts specified.
-
-Deploy:
+5. Once you are comfortable with your local dev scripts, deploying it to testnet should be simple:
 
 ```bash
-node scripts/deploy examples/call-contract-with-token [local|testnet]
+npm run deploy <TEMPLATE_DIRECTORY> testnet
 ```
 
-Run the test:
+e.g. `npm run deploy CallContractWithToken testnet`
 
-```bash
-node scripts/test examples/call-contract-with-token [local|testnet] ${"source-chain"} ${"destination-chain"} ${amount} ${account} ${account2} ...
-```
-
-#### Example
-
-```bash
-node scripts/deploy examples/call-contract-with-token local
-node scripts/test examples/call-contract-with-token local "Moonbeam" "Ethereum" 100 0xBa86A5719722B02a5D5e388999C25f3333c7A9fb
-```
-
-Output:
-
-```
---- Initially ---
-0xBa86A5719722B02a5D5e388999C25f3333c7A9fb has 100 aUSDC
---- After ---
-0xBa86A5719722B02a5D5e388999C25f3333c7A9fb has 199 aUSDC
-```
+Ensure that the account tied to your EVM_MNEMONIC has enough funds to deploy to all supported EVM chains!
