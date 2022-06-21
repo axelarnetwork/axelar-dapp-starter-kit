@@ -53,8 +53,9 @@ async function test(chains, wallet, options) {
     let gasPrice;
 
     try {
-        gasPrice = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "aUSDC");
+        gasPrice = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "USDC");
     } catch (e) {
+        console.log("catching",e)
         gasPrice = 1;
     }
 
