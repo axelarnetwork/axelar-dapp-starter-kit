@@ -57,20 +57,19 @@ This will build your contracts in the `build` folder and the `web` directory for
 
 Option 1: Via command line:
 
-a. The `index.js` file already has the base scaffold for how to invoke you new contract. Update that file to tailor to your code implementation
-b. Then run `npm run invoke-contract <TEMPLATE_DIRECTORY> <ENVIRONMENT> <SRC_CHAIN> <DEST_CHAIN> <AMOUNT> <ADDR_1> <ADDR_2> <OTHER_ADDRESSES>` (with your custom args as needed)
-e.g. `npm run invoke-contract CallContractWithToken local Ethereum Avalanche 40 0x74Ccd7d9F1F40417C6F7fD1151429a2c44c34e6d 0x3B94CbD6d0f09db75435d6E3c9449a6B70BB55E2`
+-   The `index.js` file already has the base scaffold for how to invoke you new contract. Update that file to tailor to your code implementation
+-   Then run `npm run invoke-contract <TEMPLATE_DIRECTORY> <ENVIRONMENT> <SRC_CHAIN> <DEST_CHAIN> <AMOUNT> <ADDR_1> <ADDR_2> <OTHER_ADDRESSES>` (with your custom args as needed)
+    e.g. `npm run invoke-contract CallContractWithToken local Ethereum Avalanche 40 0x74Ccd7d9F1F40417C6F7fD1151429a2c44c34e6d 0x3B94CbD6d0f09db75435d6E3c9449a6B70BB55E2`
 
 Option 2: run your UI in the following steps:
 
-a. In a separate terminal window, cd to the `web` directory
-b. Set up a `.env.local` file based on the `.env.sample` template in the `web` directory and update either a NEXT_PUBLIC_EVM_MNEMONIC or NEXT_PUBLIC_EVM_PRIVATE_KEY (but not both) used for testing.
-c. run `npm install`
-d. run `npm run dev`
-e. check out `http://localhost:3000` in the browser
-f. enter params in the UI. in the text input, be sure to hit the "Enter" key after each destination address!
+-   In a separate terminal window, cd to the `web` directory
+-   Set up a `.env.local` file based on the `.env.sample` template in the `web` directory and update either a NEXT_PUBLIC_EVM_MNEMONIC or NEXT_PUBLIC_EVM_PRIVATE_KEY (but not both) used for testing.
+-   run `npm install`, then `npm run dev`
+-   open browser at `http://localhost:3000`
+-   enter params in the UI. in the text input, be sure to hit the "Enter" key after each destination address!
 
-5. Once you are comfortable with your local dev scripts, deploying it to testnet should be simple:
+4. Once you are comfortable with your local dev scripts, deploying it to testnet should be simple:
 
 ```bash
 npm run deploy <TEMPLATE_DIRECTORY> testnet
