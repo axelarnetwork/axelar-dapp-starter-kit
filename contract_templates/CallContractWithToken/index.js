@@ -35,9 +35,9 @@ async function test(chains, wallet, options) {
     }
     
     async function print() {
+        console.log(`${wallet.address} has ${await source.usdc.balanceOf(wallet.address)/1e6} aUSDC on ${source.name}`)
         for(const account of accounts) {
-            console.log(`${wallet.address} has ${await source.usdc.balanceOf(account)/1e6} aUSDC on src chain`)
-            console.log(`${account} has ${await destination.usdc.balanceOf(account)/1e6} aUSDC`)
+            console.log(`${account} has ${await destination.usdc.balanceOf(account)/1e6} aUSDC on ${destination.name}`)
         }
     }
     function sleep(ms) {
@@ -52,7 +52,7 @@ async function test(chains, wallet, options) {
     let gasPrice;
 
     try {
-        gasPrice = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "USDC");
+        gasPrice = await getGasPrice(source.name.toLowerCase(), destination.name.toLowerCase(), "aUSDC");
     } catch (e) {
         gasPrice = 1;
     }

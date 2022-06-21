@@ -23,8 +23,16 @@ if(env == 'local') {
 }
 const chains = temp;
 
-const private_key = keccak256(defaultAbiCoder.encode(['string'], [process.env.EVM_MNEMONIC]));
-const wallet = new Wallet(private_key);
+let wallet;
+
+const mnemonic = process.env.EVM_MNEMONIC;
+const private_key = process.env.EVM_PRIVATE_KEY;
+
+if (mnemonic !== null && mnemonic.length > 0) {
+    wallet = Wallet.fromMnemonic(mnemonic);
+} else if (private_key !== null && private_key.length > 0) {
+    wallet = new Wallet(private_key);
+}
 
 (async () => {
     const promises = [];
@@ -45,13 +53,13 @@ const wallet = new Wallet(private_key);
     setJSON(chains, `./info/${env}.json`);
     setJSON(chains, `./web/info/${env}.json`);
 
-    fs.copyFile(`./build/${process.argv[2]}.json`, `./web/utils/${process.argv[2]}.json`, (err) => {
+    fs.copyFile(`./build/${process.argv[2]}.json`, `./web/abi/${process.argv[2]}.json`, (err) => {
         if (err) throw err;
     });
-    fs.copyFile(`./build/IAxelarGateway.json`, `./web/utils/IAxelarGateway.json`, (err) => {
+    fs.copyFile(`./build/IAxelarGateway.json`, `./web/abi/IAxelarGateway.json`, (err) => {
         if (err) throw err;
     });
-    fs.copyFile(`./build/IERC20.json`, `./web/utils/IERC20.json`, (err) => {
+    fs.copyFile(`./build/IERC20.json`, `./web/abi/IERC20.json`, (err) => {
         if (err) throw err;
     });
 })();

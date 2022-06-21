@@ -26,17 +26,23 @@ if(env == 'local') {
 const chains = temp;
 const args = process.argv.slice(4);
 
-const private_key = keccak256(defaultAbiCoder.encode(['string'], [process.env.EVM_MNEMONIC]));
-const wallet = new Wallet(private_key);
+const mnemonic = process.env.EVM_MNEMONIC;
+const private_key = process.env.EVM_PRIVATE_KEY;
+let wallet;
+
+if (mnemonic !== null && mnemonic.length > 0) {
+    wallet = Wallet.fromMnemonic(mnemonic);
+} else if (private_key !== null && private_key.length > 0) {
+    wallet = new Wallet(private_key);
+}
 
 function wrappedGetGasPrice(sourceChainName, destinationChainName, tokenSymbol) {
-    return axelarApi.estimateGasFee(sourceChainName, destinationChainName, tokenSymbol);
+    return env.toLowerCase() === "local" ? 3e6 : axelarApi.estimateGasFee(sourceChainName, destinationChainName, tokenSymbol);
 }
 function wrappedGetDepositAddress(source, destination, destinationAddress, symbol) {
     return getDepositAddress(env, source, destination, destinationAddress, symbol);
 }
 (async () => {
-    
     await example.test(chains, wallet, {
         getGasPrice: wrappedGetGasPrice, 
         getDepositAddress: wrappedGetDepositAddress,
