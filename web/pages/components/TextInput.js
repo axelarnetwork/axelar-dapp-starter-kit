@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 
 export const TextInput = ({ className, cb }) => {
@@ -11,8 +11,13 @@ export const TextInput = ({ className, cb }) => {
         setAliasAddress("");
     }
 
+    function handleOnSubmit(e) {
+        e.preventDefault();
+        handleOnAddAddress();
+    }
+
     return (
-        <div className={`form-control ${className}`}>
+        <form onSubmit={handleOnSubmit} className={`form-control ${className}`}>
             <label className={`input-group rounded-md border-neutral-content flex"}`}>
                 <DebounceInput
                     type="text"
@@ -22,10 +27,10 @@ export const TextInput = ({ className, cb }) => {
                     onChange={(e) => setAliasAddress(e.target.value)}
                     className={`flex-1 input input-bordered text-white hover:outline-none focus:outline-none active:outline-none appearance-none`}
                 />
-                <button className="btn btn-primary" onClick={handleOnAddAddress}>
+                <button type="submit" className="btn btn-primary" onClick={handleOnAddAddress}>
                     Add
                 </button>
             </label>
-        </div>
+        </form>
     );
 };
