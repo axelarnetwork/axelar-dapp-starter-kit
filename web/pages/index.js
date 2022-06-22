@@ -1,6 +1,7 @@
 //index.js
 
 import { useState, useEffect } from "react";
+import cn from "classnames";
 import { ethers, getDefaultProvider, Contract, AddressZero, Wallet, BigNumber } from "ethers";
 import { defaultAbiCoder } from "ethers/lib/utils";
 import Loader from "react-loader-spinner";
@@ -132,16 +133,16 @@ const app = () => {
         setLoadingState(1);
         console.log("--- After ---");
         await print();
-        setDestBalances(await getBalances(destChain.name, destAddresses))
+        setDestBalances(await getBalances(destChain.name, destAddresses));
     };
 
     return (
         <div className="flex flex-col items-center pt-32 bg-[#0B132B] text-[#d3d3d3] min-h-screen">
-            <h2 className="text-3xl font-bold mb-20 mt-12">
+            <h2 className="mt-12 mb-20 text-3xl font-bold">
                 Sample ContractCallWithToken: Let's airdrop!
             </h2>
             {needInput && (
-                <div className="bg-base-100 shadow-xl w-4/6">
+                <div className="w-4/6 shadow-xl bg-base-100">
                     <div className="grid grid-cols-2 gap-10 ">
                         {" "}
                         {ChainCard(srcChain, (option) => {
@@ -155,7 +156,7 @@ const app = () => {
                         })}
                         {ChainCard(destChain, (option) => setDestChain(option))}
                     </div>
-                    <div className="flex flex-col justify-center items-center mb-10 font-bold text-2xl">
+                    <div className="flex flex-col items-center justify-center mb-10 text-2xl font-bold">
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Enter aUSDC amount</span>
@@ -171,22 +172,28 @@ const app = () => {
                             </label>
                         </div>
                     </div>
-                    <div className="flex flex-col justify-center items-center mb-10 font-bold text-2xl">
+                    <div className="flex flex-col items-center justify-center mb-10 text-2xl font-bold">
                         <TextInput
                             className={"w-1/2"}
                             cb={(addr) => setDestAddresses([...destAddresses, addr])}
                         />
                     </div>
-                    <div className="flex flex-row justify-center items-center mb-10 font-bold text-2xl gap-2">
+                    <div className="flex flex-row items-center justify-center gap-2 mb-10 text-2xl font-bold">
                         {destAddresses?.map((addr) => (
                             <div key={`dest-addr-${addr}`} className="badge badge-primary">
                                 {addr.slice(0, 5) + "..." + addr.slice(35)}
                             </div>
                         ))}
                     </div>
-                    <div className="flex flex-row justify-center items-center mb-10 font-bold text-2xl gap-2">
+                    <div className="flex flex-row items-center justify-center gap-2 mb-10 text-2xl font-bold">
                         <button
-                            className="text-2xl font-bold py-3 px-12 bg-black rounded-lg mb-10 hover:scale-105 transition duration-500 ease-in-out"
+                            disabled={destAddresses.length === 0}
+                            className={cn(
+                                "px-12 py-3 mb-10 btn-lg font-bold transition duration-500 ease-in-out btn btn-success hover:scale-105",
+                                {
+                                    "btn-disabled": destAddresses.length === 0
+                                }
+                            )}
                             onClick={executeCallContractWithToken}
                         >
                             Execute CallContractWithToken
@@ -198,10 +205,10 @@ const app = () => {
             {loadingState === 0 ? (
                 miningStatus === 0 ? (
                     txError === null ? (
-                        <div className="flex flex-col justify-center items-center">
+                        <div className="flex flex-col items-center justify-center">
                             <div className="text-lg font-bold">Processing your transaction</div>
                             <Loader
-                                className="flex justify-center items-center pt-12"
+                                className="flex items-center justify-center pt-12"
                                 type="TailSpin"
                                 color="#d3d3d3"
                                 height={40}
@@ -209,7 +216,7 @@ const app = () => {
                             />
                         </div>
                     ) : (
-                        <div className="text-lg text-red-600 font-semibold">{txError}</div>
+                        <div className="text-lg font-semibold text-red-600">{txError}</div>
                     )
                 ) : (
                     <div></div>
@@ -218,12 +225,20 @@ const app = () => {
                 <div className="flex flex-col justify-center items-center h-60 w-60 rounded-lg shadow-2xl shadow-[#6FFFE9] hover:scale-105 transition duration-500 ease-in-out">
                     <div>Transfers Complete!</div>
                     <div>Updated Balances on {destChain.name}</div>
-                    <div>{destBalances && destBalances.map(destBal => {
-                        return <div key={`dest-balance-${destBal.address}`} className="flex flow-row">
-                            <span>0x...{destBal.address.slice(35)}: </span>
-                            <span>{destBal.balance}</span>
-                        </div>
-                    })}</div>
+                    <div>
+                        {destBalances &&
+                            destBalances.map((destBal) => {
+                                return (
+                                    <div
+                                        key={`dest-balance-${destBal.address}`}
+                                        className="flex flow-row"
+                                    >
+                                        <span>0x...{destBal.address.slice(35)}: </span>
+                                        <span>{destBal.balance}</span>
+                                    </div>
+                                );
+                            })}
+                    </div>
                 </div>
             )}
         </div>
@@ -241,9 +256,8 @@ export async function getBalances(chainName, addresses) {
         balances.push({
             chain: chainName,
             address: addr,
-            balance: ethers.utils.formatUnits(await destination.usdc.balanceOf(addr),6)
-    
-        })
+            balance: ethers.utils.formatUnits(await destination.usdc.balanceOf(addr), 6)
+        });
     }
     return balances;
 }
