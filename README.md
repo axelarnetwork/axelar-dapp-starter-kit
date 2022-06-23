@@ -16,8 +16,10 @@ Once ready, you can use this repo to deploy your contracts to testnet.
 Install [nodejs](https://nodejs.org/en/download/) version 16. Run `node -v` to check your installation. If needed you can switch your node version via
 ```bash
 sudo npm i -g n
-n v16.15.0
+sudo n v16.15.0
 ```
+
+If you're on MacOS and installed `node` via homebrew, you'd need to uninstall it before using `n`.
 
 Clone this repo:
 
