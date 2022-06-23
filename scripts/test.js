@@ -30,10 +30,13 @@ const mnemonic = process.env.EVM_MNEMONIC;
 const private_key = process.env.EVM_PRIVATE_KEY;
 let wallet;
 
-if (mnemonic !== null && mnemonic.length > 0) {
+
+if (!!mnemonic) {
     wallet = Wallet.fromMnemonic(mnemonic);
-} else if (private_key !== null && private_key.length > 0) {
+} else if (!!private_key) {
     wallet = new Wallet(private_key);
+} else {
+    throw new Error("must provide either EVM_MNEMONIC or EVM_PRIVATE_KEY environment variable")
 }
 
 function wrappedGetGasPrice(sourceChainName, destinationChainName, tokenSymbol) {

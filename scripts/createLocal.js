@@ -16,10 +16,12 @@ const ConstAddressDeployer = require("axelar-utils-solidity/dist/ConstAddressDep
     const private_key = process.env.EVM_PRIVATE_KEY;
     
     let wallet;
-    if (!!mnemonic && mnemonic.length > 0) {
+    if (!!mnemonic) {
         wallet = Wallet.fromMnemonic(mnemonic);
-    } else if (!!private_key && private_key.length > 0) {
+    } else if (!!private_key) {
         wallet = new Wallet(private_key);
+    } else {
+        throw new Error("must provide either EVM_MNEMONIC or EVM_PRIVATE_KEY environment variable")
     }
     const deployer_address = wallet.address;
     const weth_addresses = {};
